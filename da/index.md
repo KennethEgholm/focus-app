@@ -17,13 +17,17 @@ Hvis du har slettet eller omdøbt dem, så klik **Tilføj genveje** igen.
 
 ## Forstyr ikke bliver ved med at være slået til efter log ud eller nedlukning
 
-Kendt begrænsning i 1.0: Focus slår kun Forstyr ikke fra, når en session slutter, eller når du afslutter Focus fra dens menu. Hvis din Mac logger ud eller lukker ned midt i en session, så slå det fra i Kontrolcenter.
+Kendt begrænsning i 1.0: Focus slår kun Forstyr ikke fra, når en session slutter, eller når du afslutter Focus fra dens menu. Hvis din Mac logger ud eller lukker ned midt i en session, så slå det fra i Kontrolcenter. En begivenhed fra "Bloker tid i kalender" beholder i så fald også sin planlagte længde; ret eller slet den i Kalender.
 
 ## Knappen "Til møde" vises ikke
 
 - Indstillinger → Kalender → **Brug kalender** skal være slået til, og Focus skal have adgang til kalenderen (Systemindstillinger → Anonymitet og sikkerhed → Kalendere).
 - Den vises kun, når der er et møde senere i dag og mindst 5 minutters fokustid før det (den slutter 5 minutter før mødet).
 - Heldagsbegivenheder, afviste eller aflyste begivenheder og begivenheder markeret som "ledig" tæller ikke som møder.
+
+## Vis næste møde i menulinjen
+
+Indstillinger → Kalender → **Vis næste møde i menulinjen** (kræver **Brug kalender**). Under **Vis** vælger du kun titlen, titel og starttid eller titel og minutter til start.
 
 ## Kolleger kan ikke se min fokusblokering
 

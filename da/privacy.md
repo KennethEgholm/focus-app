@@ -21,7 +21,7 @@ Intet. Focus har ingen konto, ingen analyse, ingen sporing og ingen servere. Den
 - **Kalender** — kun hvis du slår "Brug kalender" eller "Bloker tid i kalender" til og giver adgang:
   - Focus læser dagens begivenheder på din Mac for at finde dit næste møde. Den gemmer eller sender dem ikke.
   - Med "Bloker tid i kalender" slået til tilføjer Focus én optaget-begivenhed pr. session, med det du arbejder på som titel (eller "Focusing – DND"), i den kalender du har valgt — og afkorter eller fjerner den bagefter. Kalenderens egen synkronisering (fx iCloud, Google eller Exchange) deler den, som den deler alle begivenheder du opretter; det er netop meningen med funktionen.
-- **Forstyr ikke** — hvis du slår "Fokus under sessioner" til, kører Focus to genveje kaldet "Focus On" og "Focus Off" på din Mac.
+- **Forstyr ikke** — når du har tilføjet de to genveje ("Focus On" og "Focus Off"), kører Focus dem på din Mac, mens "Fokus under sessioner" er slået til (det er standard).
 - **Notifikationer** — notifikationen "Tiden er gået" oprettes på din Mac.
 
 ## Kontakt
