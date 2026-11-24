@@ -17,13 +17,18 @@ If you deleted or renamed them, click **Add Shortcuts** again.
 
 ## Do Not Disturb stays on after logging out or shutting down
 
-Known limitation in 1.0: Focus only turns Do Not Disturb off when a session ends or when you quit Focus from its menu. If your Mac logs out or shuts down mid-session, turn it off in Control Center. A "Block time in calendar" event also keeps its planned length in that case; edit or delete it in Calendar.
+Known limitation: Focus only turns Do Not Disturb off when a session ends or when you quit Focus from its menu. If your Mac logs out or shuts down mid-session, turn it off in Control Center. A "Block time in calendar" event also keeps its planned length in that case; edit or delete it in Calendar.
 
 ## The "Until meeting" button doesn't appear
 
 - Settings → Calendar → **Use calendar** must be on, and Focus must have calendar access (System Settings → Privacy & Security → Calendars).
 - It only appears when there's a meeting later today and at least 5 minutes of focus time before it (it ends 5 minutes before the meeting).
 - All-day events, declined or cancelled events, and events marked "free" don't count as meetings.
+- Only calendars ticked under **Meetings from** count (see below).
+
+## Choose which calendars count as meetings
+
+Settings → Calendar → **Meetings from** (needs **Use calendar**). Click the summary (for example "All calendars") and tick the calendars whose events should count — leave out family, birthdays or holidays. "Until meeting" and "Up next" then ignore the rest. While **All calendars** is chosen, calendars you add later count too; once you've picked specific ones, tick new calendars yourself. With nothing ticked, the button and "Up next" stay hidden.
 
 ## Show the next meeting in the menu bar
 

@@ -17,13 +17,18 @@ Hvis du har slettet eller omdøbt dem, så klik **Tilføj genveje** igen.
 
 ## Forstyr ikke bliver ved med at være slået til efter log ud eller nedlukning
 
-Kendt begrænsning i 1.0: Focus slår kun Forstyr ikke fra, når en session slutter, eller når du afslutter Focus fra dens menu. Hvis din Mac logger ud eller lukker ned midt i en session, så slå det fra i Kontrolcenter. En begivenhed fra "Bloker tid i kalender" beholder i så fald også sin planlagte længde; ret eller slet den i Kalender.
+Kendt begrænsning: Focus slår kun Forstyr ikke fra, når en session slutter, eller når du afslutter Focus fra dens menu. Hvis din Mac logger ud eller lukker ned midt i en session, så slå det fra i Kontrolcenter. En begivenhed fra "Bloker tid i kalender" beholder i så fald også sin planlagte længde; ret eller slet den i Kalender.
 
 ## Knappen "Til møde" vises ikke
 
 - Indstillinger → Kalender → **Brug kalender** skal være slået til, og Focus skal have adgang til kalenderen (Systemindstillinger → Anonymitet og sikkerhed → Kalendere).
 - Den vises kun, når der er et møde senere i dag og mindst 5 minutters fokustid før det (den slutter 5 minutter før mødet).
 - Heldagsbegivenheder, afviste eller aflyste begivenheder og begivenheder markeret som "ledig" tæller ikke som møder.
+- Kun kalendere med flueben under **Møder fra** tæller (se nedenfor).
+
+## Vælg hvilke kalendere der tæller som møder
+
+Indstillinger → Kalender → **Møder fra** (kræver **Brug kalender**). Klik på opsummeringen (fx "Alle kalendere"), og sæt flueben ved de kalendere, hvis begivenheder skal tælle – udelad fx familie, fødselsdage eller helligdage. "Til møde" og "Næste" ser så bort fra resten. Mens **Alle kalendere** er valgt, tæller kalendere du tilføjer senere også med; har du valgt bestemte, skal du selv sætte flueben ved nye. Uden flueben skjules knappen og "Næste".
 
 ## Vis næste møde i menulinjen
 
