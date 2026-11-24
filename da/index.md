@@ -9,6 +9,14 @@ permalink: /da/
 
 Focus er en timer, der bor i menulinjen i macOS. Klik på timer-ikonet for at starte en session; åbn **Indstillinger…** (⌘, mens menuen er åben) for alt andet.
 
+## Installation
+
+- **App Store:** [Focus – Timer i menulinjen](https://apps.apple.com/app/id6833000003)
+- **Homebrew, via App Store:** `brew install mas`, derefter `mas install 6833000003` (opdateringer kommer fra App Store)
+- **Homebrew, direkte:** `brew tap kennethegholm/focus`, `brew trust kennethegholm/focus` (Homebrew beder dig stole på tredjeparts-taps én gang), derefter `brew install --cask focus-menu-bar-timer`. Opdatér med `brew upgrade --cask focus-menu-bar-timer`.
+
+Det er den samme app; installér kun én af dem.
+
 ## Forstyr ikke slås ikke til
 
 Focus slår Forstyr ikke til og fra med to genveje, "Focus On" og "Focus Off". Åbn Indstillinger → Fokus → **Tilføj genveje**, og klik **Tilføj genvej** i begge vinduer, der åbner. Behold navnene præcis som de er. Vil du bruge et andet fokus (fx Arbejde), så ret handlingen "Indstil fokus" i de to genveje.

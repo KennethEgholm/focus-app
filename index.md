@@ -9,6 +9,14 @@ permalink: /
 
 Focus is a timer that lives in your macOS menu bar. Click the timer icon to start a session; open **Settings…** (⌘, while the dropdown is open) for everything else.
 
+## Install
+
+- **App Store:** [Focus – Menu Bar Timer](https://apps.apple.com/app/id6833000003)
+- **Homebrew, from the App Store:** `brew install mas`, then `mas install 6833000003` (updates come from the App Store)
+- **Homebrew, direct:** `brew tap kennethegholm/focus`, `brew trust kennethegholm/focus` (Homebrew asks you to trust third-party taps once), then `brew install --cask focus-menu-bar-timer`. Update with `brew upgrade --cask focus-menu-bar-timer`.
+
+Both are the same app; install one of them.
+
 ## Do Not Disturb doesn't turn on
 
 Focus switches Do Not Disturb with two Shortcuts, "Focus On" and "Focus Off". Open Settings → Focus → **Add Shortcuts** and click **Add Shortcut** in both windows that open. Keep the names exactly as they are. To use a different Focus (for example Work), edit the "Set Focus" action inside those two Shortcuts.
