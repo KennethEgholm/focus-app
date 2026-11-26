@@ -46,6 +46,10 @@ Indstillinger → Kalender → **Vis næste møde i menulinjen** (kræver **Brug
 
 Indstillinger → Kalender → **Bloker tid i kalender** skal være slået til, med en delt kalender (fx din arbejdskalender) valgt. Arbejdskonti kan være lidt om at synkronisere. Vælg under "Når en session slutter", om begivenheden skal afkortes til den tid du fokuserede, eller fjernes.
 
+## Slå lyden eller konfettien fra
+
+Indstillinger → Når tiden er gået → **Lyd** eller **Konfetti**. Notifikationen kommer altid. Focus springer også konfettien over, når "Reducer bevægelse" er slået til (Systemindstillinger → Tilgængelighed → Skærm).
+
 ## Kontakt
 
 [Opret et issue på GitHub](https://github.com/KennethEgholm/focus-app/issues) — spørgsmål, fejl og idéer er alle velkomne.

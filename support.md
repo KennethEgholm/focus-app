@@ -46,6 +46,10 @@ Settings → Calendar → **Show next meeting in menu bar** (needs **Use calenda
 
 Settings → Calendar → **Block time in calendar** must be on, with a shared calendar (for example your work calendar) picked. Work accounts can take a moment to sync. Choose under "When a session ends" whether the event is shortened to the time you focused or removed.
 
+## Turn off the sound or the confetti
+
+Settings → When time's up → **Sound** or **Confetti**. The notification always comes. Focus also skips the confetti when "Reduce motion" is on (System Settings → Accessibility → Display).
+
 ## Contact
 
 [Open an issue on GitHub](https://github.com/KennethEgholm/focus-app/issues) — questions, bugs and ideas are all welcome.
