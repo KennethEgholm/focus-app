@@ -1,9 +1,9 @@
 ---
 title: Focus — Support
-permalink: /
+permalink: /support/
 ---
 
-[Privacy policy](privacy/) · [Dansk](da/)
+[Focus](../) · [Privacy policy](../privacy/) · [Dansk](../da/support/)
 
 # Focus — Support
 

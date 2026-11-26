@@ -1,9 +1,9 @@
 ---
 title: Focus — Support (dansk)
-permalink: /da/
+permalink: /da/support/
 ---
 
-[Privatlivspolitik](privacy/) · [English](../)
+[Focus](../../) · [Privatlivspolitik](../privacy/) · [English](../../support/)
 
 # Focus — Support
 

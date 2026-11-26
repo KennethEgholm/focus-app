@@ -3,7 +3,7 @@ title: Focus — Privatlivspolitik
 permalink: /da/privacy/
 ---
 
-[Support](../) · [English](../../privacy/)
+[Focus](../../) · [Support](../support/) · [English](../../privacy/)
 
 # Focus — Privatlivspolitik
 

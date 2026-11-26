@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Focus – Menu Bar Timer for Mac</title>
+<meta name="description" content="A calm focus timer that lives in your Mac's menu bar. 25, 50 or 90 minutes, or until your next meeting. Free, no account, no tracking.">
+<meta property="og:title" content="Focus – Menu Bar Timer">
+<meta property="og:description" content="A calm focus timer that lives in your Mac's menu bar. Free, no account, no tracking.">
+<meta property="og:image" content="https://kennethegholm.github.io/focus-app/images/icon.png">
+<meta name="theme-color" content="#141830">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/icon.png">
+<!-- No web fonts, trackers or third-party requests: the system font is the Mac's own. -->
+<style>
+  :root {
+    --night: #141830;   /* page */
+    --dusk: #1f2544;    /* raised surfaces */
+    --line: #2f3760;    /* hairlines, ring track */
+    --mist: #b6bdd8;    /* body text */
+    --snow: #f5f6fb;    /* headings */
+    --teal: #5ee6d0;    /* ring start, from the app icon */
+    --violet: #a291ff;  /* ring end */
+    --ring: linear-gradient(100deg, var(--teal), var(--violet));
+    --measure: 34rem;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 3rem; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: radial-gradient(70rem 40rem at 85% -10%, #26305a 0%, transparent 60%), var(--night);
+    color: var(--mist);
+    font: 400 1.0625rem/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--snow); text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, var(--snow) 35%, transparent); }
+  a:hover { text-decoration-color: currentColor; }
+  :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 4px; }
+  h1, h2, h3 {
+    color: var(--snow);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+  }
+  .wrap { max-width: 68rem; margin: 0 auto; padding-inline: 1.5rem; }
+  @media (max-width: 36rem) { .wrap { padding-inline: 1rem; } }
+
+  /* The page's top bar is a menu bar, with a live Focus session in it. */
+  .menubar {
+    position: sticky; top: 0; z-index: 10;
+    height: 2.25rem;
+    background: color-mix(in srgb, #0c0f22 72%, transparent);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border-bottom: 1px solid #ffffff10;
+    font-size: .875rem;
+  }
+  .menubar .wrap { height: 100%; display: flex; align-items: center; gap: 1.25rem; }
+  .menubar a { color: var(--snow); text-decoration: none; opacity: .85; }
+  .menubar a:hover { opacity: 1; }
+  .menubar .app { font-weight: 700; opacity: 1; }
+  .menubar .spacer { flex: 1; }
+  .session {
+    display: inline-flex; align-items: center; gap: .4rem;
+    height: 1.5rem; padding: 0 .5rem;
+    border: 0; border-radius: .4rem;
+    background: #ffffff1f; color: var(--snow);
+    font: 500 .875rem/1 inherit; font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .session:hover { background: #ffffff2e; }
+  .session svg { width: 1.125rem; height: 1.125rem; }
+  .session circle, .session path { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; }
+  .session .track { opacity: .3; }
+  .session .dot { fill: currentColor; stroke: none; }
+  .session .bars rect { fill: currentColor; }
+  .clock { font-variant-numeric: tabular-nums; opacity: .85; }
+  @media (max-width: 36rem) { .menubar .nav, .clock { display: none; } }
+
+  /* Hero: the headline, and the same session drawn as the app icon's ring. */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 3rem; align-items: center; padding-block: 6rem 5rem; }
+  .hero h1 { font-size: clamp(2.6rem, 6.4vw, 4.75rem); line-height: 1.02; letter-spacing: -.035em; font-weight: 700; max-width: 11ch; }
+  .hero p { font-size: 1.25rem; max-width: 28rem; margin: 1.5rem 0 2rem; }
+  .cta {
+    display: inline-block; padding: .8rem 1.4rem; border-radius: 99px;
+    background: var(--ring); color: #10142b; font-weight: 650; text-decoration: none;
+  }
+  .cta:hover { filter: brightness(1.08); }
+  .fine { font-size: .875rem; margin: 1rem 0 0; opacity: .8; }
+  .dial { justify-self: center; width: min(100%, 20rem); text-align: center; }
+  .dial svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
+  .dial .track { fill: none; stroke: var(--line); stroke-width: 9; }
+  .dial .arc { fill: none; stroke: url(#ringGradient); stroke-width: 9; stroke-linecap: round; filter: drop-shadow(0 0 14px #7fd8ff55); }
+  .dial .dot { fill: #f7f8ff; filter: drop-shadow(0 0 10px #ffffff88); }
+  .dial .readout {
+    margin-top: 1.75rem;
+    color: var(--snow); font-size: clamp(1.6rem, 3.4vw, 2.1rem); font-weight: 300; font-variant-numeric: tabular-nums; letter-spacing: .02em; line-height: 1.2;
+  }
+  .dial .task { display: block; font-size: .8125rem; font-weight: 400; color: var(--mist); letter-spacing: 0; }
+  @media (max-width: 50rem) {
+    .hero { grid-template-columns: minmax(0, 1fr); padding-block: 3rem; gap: 2.5rem; }
+    .dial { width: min(60%, 13rem); grid-row: 1; justify-self: start; text-align: left; }
+  }
+
+  /* How it works: a real sequence, so the markers are numbered. Each marker's
+     ring is filled by how far along the session you are. */
+  section { padding: 4.5rem 0; }
+  .section-title { font-size: clamp(1.9rem, 4vw, 2.6rem); letter-spacing: -.025em; line-height: 1.1; margin-bottom: 1rem; }
+  .lead { max-width: var(--measure); margin: 0; }
+  .step { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; align-items: center; margin-top: 5rem; }
+  .step:nth-of-type(even) .shot { order: 2; }
+  .step h3 { font-size: 1.6rem; letter-spacing: -.02em; line-height: 1.2; margin: .9rem 0 .75rem; }
+  .step p { max-width: var(--measure); margin: 0 0 .75rem; }
+  .marker { display: flex; align-items: center; gap: .6rem; color: var(--snow); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .marker svg { width: 2rem; height: 2rem; }
+  .marker .track { fill: none; stroke: var(--line); stroke-width: 3; }
+  .marker .arc { fill: none; stroke: url(#ringGradient); stroke-width: 3; stroke-linecap: round; }
+  .shot { justify-self: center; margin: 0; max-width: 100%; }
+  .shot img { display: block; width: 100%; height: auto; filter: drop-shadow(0 30px 50px #0009) drop-shadow(0 2px 6px #0006); }
+  .shot.panel img { width: min(100%, 23rem); }
+  .shot.settings img { width: min(100%, 27rem); }
+  .shot figcaption { font-size: .8125rem; text-align: center; margin-top: 1rem; opacity: .7; }
+  @media (max-width: 50rem) {
+    .step { grid-template-columns: minmax(0, 1fr); gap: 2rem; margin-top: 3.5rem; }
+    .step:nth-of-type(even) .shot { order: 0; }
+  }
+
+  .private { border-block: 1px solid #ffffff12; padding: 3rem 0; }
+  .private p { margin: 0; max-width: 44rem; font-size: 1.25rem; color: var(--snow); line-height: 1.5; }
+  .private span { color: var(--mist); }
+
+  /* Install */
+  .ways { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .way { background: var(--dusk); border: 1px solid #ffffff10; border-radius: 1.1rem; padding: 1.75rem; }
+  .way h3 { font-size: 1.2rem; margin-bottom: .5rem; }
+  .way p { margin: 0 0 1rem; font-size: .9375rem; }
+  .way .note { font-size: .875rem; margin: 1rem 0 0; padding-left: .8rem; border-left: 2px solid var(--violet); }
+  .store {
+    display: inline-flex; align-items: center; gap: .55rem; padding: .7rem 1.2rem; border-radius: .7rem;
+    background: var(--snow); color: #10142b; font-weight: 650; text-decoration: none;
+  }
+  .store:hover { background: #fff; }
+  .store img { width: 1.5rem; height: 1.5rem; border-radius: .35rem; }
+  .code { position: relative; background: #0d1024; border: 1px solid #ffffff12; border-radius: .7rem; }
+  .code pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; font: .875rem/1.75 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #e3e7ff; }
+  .code .prompt { color: var(--teal); user-select: none; }
+  .copy {
+    position: absolute; top: .55rem; right: .55rem; padding: .3rem .65rem; border-radius: .45rem;
+    border: 1px solid #ffffff22; background: var(--dusk); color: var(--snow); font: 500 .8125rem/1.2 inherit; cursor: pointer;
+  }
+  .copy:hover { background: var(--line); }
+  .way small { display: block; margin-top: .9rem; font-size: .8125rem; line-height: 1.5; }
+  code { font: .875em ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #e3e7ff; }
+  .both { margin: 1.5rem 0 0; font-size: .9375rem; }
+  @media (max-width: 50rem) { .ways { grid-template-columns: minmax(0, 1fr); } }
+
+  footer { padding: 3rem 0 4rem; font-size: .875rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: center; }
+  footer a { color: var(--mist); }
+  footer .me { margin-right: auto; opacity: .7; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5ee6d0"/>
+      <stop offset="1" stop-color="#a291ff"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header class="menubar">
+  <div class="wrap">
+    <a class="app" href="#top">Focus</a>
+    <a class="nav" href="#how">How it works</a>
+    <a class="nav" href="#install">Install</a>
+    <span class="spacer"></span>
+    <button class="session" id="session" type="button" aria-label="Focus session: 25 minutes left. Click to pause.">
+      <svg viewBox="0 0 18 18" aria-hidden="true">
+        <circle class="track" cx="9" cy="9" r="6.8"/>
+        <path id="sessionArc" d=""/>
+        <circle class="dot" id="sessionDot" cx="9" cy="9" r="2"/>
+        <g class="bars" id="sessionBars" hidden><rect x="7.1" y="6.8" width="1.4" height="4.4" rx=".7"/><rect x="9.5" y="6.8" width="1.4" height="4.4" rx=".7"/></g>
+      </svg>
+      <span id="sessionTime">25:00</span>
+    </button>
+    <span class="clock" id="clock" aria-hidden="true"></span>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <h1>Focus, without opening a window.</h1>
+      <p>A calm timer that lives in your Mac's menu bar. Pick a length, say what you're working on, and get going. The time left sits quietly next to the icon.</p>
+      <a class="cta" href="#install">Get Focus for free</a>
+      <p class="fine">For macOS 27 and later. No account, no ads, no tracking.</p>
+    </div>
+    <div class="dial" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <circle class="track" cx="100" cy="100" r="72"/>
+        <path class="arc" id="dialArc" d=""/>
+        <circle class="dot" cx="100" cy="100" r="13"/>
+      </svg>
+      <div class="readout"><span id="dialTime">25:00</span><span class="task">Write chapter 3</span></div>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <h2 class="section-title">How it works</h2>
+      <p class="lead">Everything happens in a small menu under the ring in your menu bar. There's no window to keep open.</p>
+
+      <article class="step">
+        <figure class="shot panel"><img src="images/1-start.png" width="780" height="660" alt="The Focus menu with buttons for 25, 50 and 90 minutes, an Until meeting button showing 35 minutes until Weekly sync, and a field reading Write chapter 3."></figure>
+        <div>
+          <div class="marker"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="track" cx="16" cy="16" r="12"/><path class="arc" data-fraction=".3333"/></svg>1 of 3</div>
+          <h3>Pick a length</h3>
+          <p>Click the ring in the menu bar and choose 25, 50 or 90 minutes. Type what you're working on, if you like.</p>
+          <p>Use your calendar and an <strong>Until meeting</strong> button appears, for a session that ends 5 minutes before your next meeting.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <figure class="shot panel"><img src="images/2-running.png" width="780" height="615" alt="The Focus menu during a session: 41:27 left of Write chapter 3, with Pause, +5 min and Stop buttons."></figure>
+        <div>
+          <div class="marker"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="track" cx="16" cy="16" r="12"/><path class="arc" data-fraction=".6667"/></svg>2 of 3</div>
+          <h3>Get to work</h3>
+          <p>The time left counts down next to the icon, like the one at the top of this page. Do Not Disturb turns on while you focus and off again when you stop.</p>
+          <p>Pause, add 5 minutes or stop at any time. A sound and a notification tell you when time's up.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <figure class="shot settings"><img src="images/3-settings.png" width="1380" height="1758" alt="Focus Settings: Focus during sessions and Use calendar are on, meetings come from all calendars, and Block time in calendar adds events to the Exchange Work calendar."></figure>
+        <div>
+          <div class="marker"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="track" cx="16" cy="16" r="12"/><path class="arc" data-fraction="1"/></svg>3 of 3</div>
+          <h3>Fit it to your day</h3>
+          <p>Settings are optional and few. Choose which calendars count as meetings, so family and birthdays stay out. Show your next meeting right in the menu bar.</p>
+          <p>Turn on <strong>Block time in calendar</strong> and each session adds a busy event, so colleagues can see you're focusing. When you finish early, the event is shortened or removed.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="private">
+    <div class="wrap">
+      <p>Private by design. <span>No account, no tracking, no data collected. Calendar events are read on your Mac and never leave it.</span></p>
+    </div>
+  </div>
+
+  <section id="install">
+    <div class="wrap">
+      <h2 class="section-title">Install</h2>
+      <p class="lead">Focus is free. Install it from the Mac App Store or with Homebrew. It needs macOS 27 or later.</p>
+
+      <div class="ways">
+        <div class="way">
+          <h3>Mac App Store</h3>
+          <p>The simplest way. Updates arrive with your other apps.</p>
+          <a class="store" href="https://apps.apple.com/app/id6833000003"><img src="images/icon.png" alt="">Open in the App Store</a>
+          <p class="note">Not in App Stores in the EU yet. In the EU, use Homebrew for now.</p>
+          <small>Homebrew user? You can also get the App Store version with <code>brew install mas</code> and then <code>mas install 6833000003</code>.</small>
+        </div>
+
+        <div class="way">
+          <h3>Homebrew</h3>
+          <p>Paste this into Terminal:</p>
+          <div class="code">
+            <pre id="brew"><span class="prompt">$ </span>brew tap kennethegholm/focus
+<span class="prompt">$ </span>brew trust kennethegholm/focus
+<span class="prompt">$ </span>brew install --cask focus-menu-bar-timer</pre>
+            <button class="copy" type="button" data-copy="brew tap kennethegholm/focus &amp;&amp; brew trust kennethegholm/focus &amp;&amp; brew install --cask focus-menu-bar-timer">Copy</button>
+          </div>
+          <small>Homebrew asks you to trust a new tap once; that's the second line. Update later with <code>brew upgrade --cask focus-menu-bar-timer</code>.</small>
+        </div>
+      </div>
+      <p class="both">Both are the same app, so install only one. Then look for the ring in your menu bar.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="me">Focus – Menu Bar Timer</span>
+    <a href="support/">Support</a>
+    <a href="privacy/">Privacy policy</a>
+    <a href="https://github.com/KennethEgholm/focus-app/issues">Report a problem</a>
+    <a href="da/support/" lang="da">Dansk</a>
+  </div>
+</footer>
+
+<script>
+  // A live 25-minute session, drawn the way the app draws its menu bar icon:
+  // the arc is the time left, shrinking toward twelve o'clock.
+  (() => {
+    const total = 25 * 60;
+    let left = total, paused = false;
+
+    // Clockwise from twelve o'clock, covering `fraction` of the circle.
+    const arc = (cx, cy, r, fraction) => {
+      if (fraction <= 0) return "";
+      fraction = Math.min(fraction, 0.99999);
+      const angle = fraction * 2 * Math.PI;
+      const x = cx + r * Math.sin(angle), y = cy - r * Math.cos(angle);
+      return `M ${cx} ${cy - r} A ${r} ${r} 0 ${fraction > 0.5 ? 1 : 0} 1 ${x.toFixed(3)} ${y.toFixed(3)}`;
+    };
+
+    document.querySelectorAll(".marker .arc").forEach(p => p.setAttribute("d", arc(16, 16, 12, +p.dataset.fraction)));
+
+    const el = id => document.getElementById(id);
+    const mmss = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+    const render = () => {
+      const f = left / total, t = mmss(left);
+      el("sessionTime").textContent = t;
+      el("dialTime").textContent = t;
+      el("sessionArc").setAttribute("d", arc(9, 9, 6.8, f));
+      el("dialArc").setAttribute("d", arc(100, 100, 72, f));
+      el("sessionDot").toggleAttribute("hidden", paused);
+      el("sessionBars").toggleAttribute("hidden", !paused);
+      el("session").setAttribute("aria-label",
+        `Focus session: ${Math.ceil(left / 60)} minutes left. Click to ${paused ? "resume" : "pause"}.`);
+    };
+    const clock = () => {
+      el("clock").textContent = new Date().toLocaleString("en-GB", { weekday: "short", hour: "2-digit", minute: "2-digit" });
+    };
+
+    el("session").addEventListener("click", () => { paused = !paused; render(); });
+    setInterval(() => {
+      if (!paused) left = left > 0 ? left - 1 : total;
+      render();
+      clock();
+    }, 1000);
+    render();
+    clock();
+
+    document.querySelectorAll(".copy").forEach(button => button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy);
+        button.textContent = "Copied";
+      } catch {
+        button.textContent = "Select and copy";
+      }
+      setTimeout(() => (button.textContent = "Copy"), 2000);
+    }));
+  })();
+</script>
+</body>
+</html>

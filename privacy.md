@@ -3,7 +3,7 @@ title: Focus — Privacy Policy
 permalink: /privacy/
 ---
 
-[Support](../) · [Dansk](../da/privacy/)
+[Focus](../) · [Support](../support/) · [Dansk](../da/privacy/)
 
 # Focus — Privacy Policy
 
